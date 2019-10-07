@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--comment in html-->
+  <head>
+      <meta charset="utf-8">
+      <title>Project 1</title>
+      <script src="https://d3js.org/d3.v3.min.js"></script>
+      <style type="text/css">
+        	text {
+    			font-family: Arial;
+    			font-size: 15px;
+    		}
+    		.axis path, .axis line {
+    			fill: none;
+    			stroke: black;
+    			shape-rendering: crispEdges;
+    		}
+    		.tick text {
+    			fill: black;
+    			font-size: 11px;
+    		}
+
+          svg {
+                border: solid 1px none;
+                display: block;
+              }
+          svg:nth-child(1){
+            float:right;
+          }
+
+          div {
+                width: 1500 px;
+                border: solid 1px none;
+                overflow: auto;
+              }
+
+              #tooltip {
+              position: absolute;
+              width: auto;
+              height: auto;
+              padding: 8px;
+              background-color: white;
+              -webkit-border-radius: 10px;
+              -moz-border-radius: 10px;
+              border-radius: 10px;
+              -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              pointer-events: none;
+              }
+
+              #tooltip2.hidden {
+                      display: none;
+              }
+
+              #tooltip p {
+                      margin: 0;
+                      font-family: Arial;
+                      font-size: 14px;
+                      line-height: 20px;
+              }
+              #tooltip2 {
+              position: absolute;
+              width: auto;
+              height: auto;
+              padding: 8px;
+              background-color: white;
+              -webkit-border-radius: 10px;
+              -moz-border-radius: 10px;
+              border-radius: 10px;
+              -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              pointer-events: none;
+              }
+
+              #tooltip2.hidden {
+                      display: none;
+              }
+
+              #tooltip2 p {
+                      margin: 0;
+                      font-family: Arial;
+                      font-size: 14px;
+                      line-height: 20px;
+              }
+
+              #tooltip3 {
+              position: absolute;
+              width: auto;
+              height: auto;
+              padding: 8px;
+              background-color: white;
+              -webkit-border-radius: 10px;
+              -moz-border-radius: 10px;
+              border-radius: 10px;
+              -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+              pointer-events: none;
+              }
+
+              #tooltip3.hidden {
+                      display: none;
+              }
+
+              #tooltip3 p {
+                      margin: 0;
+                      font-family: Arial;
+                      font-size: 14px;
+                      line-height: 20px;
+              }
+      </style>
+  </head>
+
+  <body>
+    <h3>London 1854 Cholera Epidemic</h3>
+    <p>
+      <text >View:</text>
+
+      <input id="radio" type="radio" name="filterPreset" value="none" checked="true"> None
+      <input id="radio" type="radio" name="filterPreset" value="gender_mapppl"> Gender
+      <input id="radio" type="radio" name="filterPreset" value="agegroup_mapppl"> Age Groups
+    </p>
+
+    <p>
+      <input id="Reset" type="button" value="See All">
+    </p>
+
+<div style= "width:1405px">
+
+  <svg id="svg2" width="800" height="700">
+    <g id= 'barchart' transform="translate(100,30)"/>
+    <g id='genderchart' transform="translate(100,420)"/>
+    <g id='genderchart2' transform="translate(100,420)"/>
+
+    <g id='agechart0' transform="translate(100,420)"/>
+    <g id='agechart1' transform="translate(100,420)"/>
+    <g id='agechart2' transform="translate(100,420)"/>
+    <g id='agechart3' transform="translate(100,420)"/>
+    <g id='agechart4' transform="translate(100,420)"/>
+    <g id='agechart5' transform="translate(100,420)"/>
+
+    <text x="400" y="20">COUNT OF DEATHS</text>
+    <text x="400" y="40">by Date</text>
+
+    <text id="bar_txt" x="-250" y="40" transform="rotate(-90)">Number of Deaths</text>
+    <text id="gender_txt" x="-635" y="60" transform="rotate(-90)">Number of Deaths</text>
+    <text id="agegroup_txt" x="-635" y="370" transform="rotate(-90)">Number of Deaths</text>
+
+    <text x="100" y="450">GENDER DISTRIBUTION</text>
+
+    <text x="500" y="450">AGE GROUP DISTRIBUTION</text>
+
+    <g id='gentxt_f' transform="translate(100,420)"/>
+    <g id='gentxt_m' transform="translate(100,420)"/>
+    <g id='agegroup_txt' transform="translate(100,420)"/>
+
+  </svg>
+
+
+  <svg id="main" width="600" height="540" style="border: solid 1px black;
+                                                 background-color:rgb(240,240,242)">
+
+    <g id="streets" transform="translate(0,-11), rotate(1.25)" />
+    <g id='WH' transform="translate(0,-11),rotate(1.25)"/>
+    <g id='brew' transform="translate(0,-11),rotate(1.25)"/>
+    <g id="pumps" transform="translate(0,-11), rotate(1.25)"/>
+    <g id="ppl" transform="translate(0,-11), rotate(1.25)"/>
+    <g id="bstreet" transform="translate(0,-11), rotate(1.25)"/>
+    <g id="ox" transform="translate(0,-11), rotate(1.25)"/>
+    <g id="rstreet" transform="translate(0,-11), rotate(1.25)"/>
+    </g>
+  </svg>
+
+  <div id="tooltip" class="hidden">
+    <p><span id="value"></span></p>
+  </div>
+  <div id="tooltip2" class="hidden">
+    <p><span id="value"></span></p>
+  </div>
+  <div id="tooltip3" class="hidden">
+    <p><span id="value"></span></p>
+  </div>
+
+
+
+  <svg id="legend" width="600" height="160">
+    <text x="15" y="30" style="font-size: 22px;">Legend</text>
+    <text x=55 y=70 style="font-size: 12px;">Building</text>
+    <text x=55 y=105 style="font-size: 12px;">Pump</text>
+    <text x=55 y=140 style="font-size: 12px;">Death(s)</text>
+    <g id="death_legend" />
+
+    <text x=190 y=40 style="font-size: 14px;">Gender:</text>
+    <text x=215 y=70 style="font-size: 12px;">Female</text>
+    <text x=215 y=105 style="font-size: 12px;">Male</text>
+    <g id="male_legend" />
+    <g id="female_legend" />
+
+    <text x=340 y=40 style="font-size: 14px;">Age Group:</text>
+    <text x=365 y=70 style="font-size: 12px;">0 to 10</text>
+    <text x=365 y=105 style="font-size: 12px;">11 to 20</text>
+    <text x=365 y=140 style="font-size: 12px;">21 to 40</text>
+    <text x=500 y=70 style="font-size: 12px;">41 to 60</text>
+    <text x=500 y=105 style="font-size: 12px;">61 to 80</text>
+    <text x=500 y=140 style="font-size: 12px;">> 80</text>
+
+    <g id="legend_age1" />
+    <g id="legend_age2" />
+    <g id="legend_age3" />
+    <g id="legend_age4" />
+    <g id="legend_age5" />
+    <g id="legend_age6" />
+
+  </svg>
+</div>
+    <script type="text/javascript">
+
+//Age group color
+var color_group1="crimson"
+var color_group2="salmon"
+var color_group3="mediumblue"
+var color_group4="dodgerblue"
+var color_group5="goldenrod"
+var color_group6="gold"
+
+var color_gender_f="hotpink"
+var color_gender_m="blue"
+
+    //Width and height
+    var map_w = 16.5*37.3;
+    var map_h = 15.47*37.3;
+    var padding = 1;
+
+    //Create svg
+    var svg2= d3.select("#svg2")
+
+    var svg= d3.select("#main");
+
+
+//Restricted Zoom by Shawn Allen
+//http://bl.ocks.org/shawnbot/6518285
+    //zoom
+    var g_streets= svg.select("#streets").append("g");
+    var g_wh= svg.select("#WH").append("g");
+    var g_brew= svg.select("#brew").append("g");
+    var g_pumps= svg.select("#pumps").append("g");
+    var g_ppl= svg.select("#ppl").append("g");
+    var text_bstreet= svg.select("#bstreet").append("g");
+    var text_ox= svg.select("#ox").append("g");
+    var text_rstreet= svg.select("#rstreet").append("g");
+
+    var zoom= d3.behavior.zoom()
+                .scaleExtent([1,4])
+                .on("zoom", function(){
+                  var e=d3.event,
+
+                    tx=Math.min(0,Math.max(e.translate[0], map_w-(map_w*e.scale))),
+                    ty=Math.min(0,Math.max(e.translate[1], map_h-(map_h*e.scale)));
+                  zoom.translate([tx,ty]);
+
+                  g_streets.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+
+                  g_pumps.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+                  g_wh.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+                  g_brew.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+                  g_ppl.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+
+                  text_bstreet.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+
+                  text_ox.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+
+                  text_rstreet.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+                });
+
+      svg.call(zoom);
+
+///////////////////////////////////////////////////
+//////////////////    MAP    //////////////////////
+
+        var streets_under = [];
+        var streets=[];
+        var pumps=[];
+        var ppl=[];
+        var death_time=[];
+
+        //Create scale functions
+  			var xScale = d3.scale.linear()
+  								 .domain([3.3900001, 19.9120007])
+  								 .range([padding, map_w-padding]);
+
+  			var yScale = d3.scale.linear()
+  								 .domain([3.2349999, 18.7250004])
+  								 .range([map_h-padding, padding]);
+
+
+//text
+var txt1=[[9,8.29]];
+
+text_bstreet.selectAll("text")
+    .data(txt1)
+    .enter()
+    .append("text")
+    .attr("x", function(d){
+      return xScale(d[0]);
+    })
+    .attr("y", function(d){
+      return yScale(d[1]);
+    })
+    .text("BROAD STREET")
+    .style("font-size", "5px")
+    .attr("fill","black")
+    .attr("transform", "rotate(-27.25)");;
+
+//
+    var ox=[[11,15.18]];
+
+    text_ox.selectAll("text")
+        .data(ox)
+        .enter()
+        .append("text")
+        .attr("x", function(d){
+          return xScale(d[0]);
+        })
+        .attr("y", function(d){
+          return yScale(d[1]);
+        })
+        .text("OXFORD STREET")
+        .style("font-size", "5px")
+        .attr("fill","black")
+        .attr("transform", "rotate(-11)");
+
+
+  var rstreet=[[10.7,18.5]];
+  text_rstreet.selectAll("text")
+            .data(rstreet)
+            .enter()
+            .append("text")
+            .attr("x", function(d){
+              return xScale(d[0]);
+            })
+            .attr("y", function(d){
+              return yScale(d[1]);
+            })
+            .text("REGENT STREET")
+            .style("font-size", "5px")
+            .attr("fill","black")
+            .attr("transform", "rotate(60.1)");
+
+//WH
+
+var wh=[[7.35,10.7]]; //
+
+g_wh.selectAll("rect")
+    .data(wh)
+    .enter()
+    .append("rect")
+    .attr("x", function(d){
+      return xScale(d[0]);
+    })
+    .attr("y", function(d){
+      return yScale(d[1]);
+    })
+    .attr("stroke","black")
+    .attr("width",40)
+    .attr("height", 35)
+    .attr("fill","gray")
+    .attr("transform", "rotate(-27)")
+    .on("mouseover", function(d){
+             d3.select(this)
+               .transition()
+               .duration(500)
+               .attr("fill", "yellow")
+
+             var xPosition = parseFloat(d3.select(this).attr("x"))+100;
+             var yPosition = parseFloat(d3.select(this).attr("y"))-100;
+
+             //Update the tooltip position and value
+             d3.select("#tooltip2")
+               .style("left", xPosition + "px")
+               .style("top", yPosition + "px")
+               .select("#value")
+               .text("WORK HOUSE");
+
+             //Show the tooltip
+             d3.select("#tooltip2").classed("hidden", false)
+      })
+    .on("mouseout", function(d){
+        d3.select(this)
+          .transition()
+          .duration(500)
+          .attr("fill","gray");
+
+        //Hide tooltip
+        d3.select("#tooltip2").classed("hidden", true);
+    });
+
+
+//Brewery
+var brew=[[9.35,8.1]]; //
+
+g_brew.selectAll("rect")
+    .data(brew)
+    .enter()
+    .append("rect")
+    .attr("x", function(d){
+      return xScale(d[0]);
+    })
+    .attr("y", function(d){
+      return yScale(d[1]);
+    })
+    .attr("stroke","black")
+    .attr("width",13)
+    .attr("height", 28)
+    .attr("fill","gray")
+    .attr("transform", "rotate(-27.5)")
+    .on("mouseover", function(d){
+             d3.select(this)
+               .transition()
+               .duration(500)
+               .attr("fill", "yellow")
+
+             var xPosition = parseFloat(d3.select(this).attr("x"))+100;
+             var yPosition = parseFloat(d3.select(this).attr("y"))-150;
+
+             //Update the tooltip position and value
+             d3.select("#tooltip2")
+               .style("left", xPosition + "px")
+               .style("top", yPosition + "px")
+               .select("#value")
+               .text("BREWERY");
+
+             //Show the tooltip
+             d3.select("#tooltip2").classed("hidden", false)
+      })
+    .on("mouseout", function(d){
+        d3.select(this)
+          .transition()
+          .duration(500)
+          .attr("fill","gray");
+
+        d3.select("#tooltip2").classed("hidden", true);
+    });
+
+
+//Function to plot pumps
+function plotpumps(){
+        //Create SVG element
+
+                  g_pumps.selectAll("circle")
+                     .data(pumps)
+                     .enter()
+                     .append("circle")
+                     .attr("cx", function(d) {
+                          return xScale(d[0]);
+                     })
+                     .attr("cy", function(d) {
+                          return yScale(d[1]);
+                     })
+                     .attr("r", function(d) {
+                        return 5;
+                      })
+                     .attr("fill","aqua")
+                     .attr("stroke","black")
+                     .attr("stroke-width","1px")
+                     .style("opacity",1)
+                     .on("mouseover", function(d){
+                            d3.select(this)
+                              .transition()
+                              .duration(500)
+                              .attr("fill", "yellow");
+
+                              var xPosition = xScale(d[0]);
+                              var yPosition = yScale(d[1]);
+
+                            //Update the tooltip position and value
+                            d3.select("#tooltip3")
+                              .style("left", xPosition + "px")
+                              .style("top", yPosition + "px")
+                              .select("#value")
+                              .text(d[2] + " Pump");
+
+                            //Show the tooltip
+                            d3.select("#tooltip3").classed("hidden", false)
+                          })
+                     .on("mouseout", function(d){
+                            d3.select(this)
+                              .transition()
+                              .duration(500)
+                              .attr("fill", "aqua")
+                              .attr("r", 5);
+
+                            d3.select("#tooltip3").classed("hidden", true);
+                          });
+
+                   };
+
+
+
+
+//Function to plot ppl
+function plotppl(){
+        //Create SVG element
+
+                    g_ppl.selectAll("circle")  // <-- No longer "rect"
+                         .data(ppl)
+                         .enter()
+                         .append("circle")
+                         .attr("cx", function(d) {
+                              return xScale(d[0]);
+                         })
+                         .attr("cy", function(d) {
+                              return yScale(d[1]);
+                         })
+                         .attr("r", function(d) {
+                            return 2;
+                        })
+                        .attr("fill","purple	")
+                        .attr("stroke","black")
+                        .attr("stroke-width","0.5px")
+                        .attr("opacity",1)
+                      };
+
+
+//Function to draw lines
+
+function drawLines()
+{
+  var lineFn = d3.svg.line()
+          .x(function (d) {
+              return xScale(d.x);
+          })
+          .y(function (d) {
+              return yScale(d.y);
+          });
+
+  for(i=0;i<streets.length;i++)
+        {
+        g_streets.append("path")
+                .style("fill", "none")
+                .style("stroke-linecap","round")
+                .style("stroke", "white")
+                .style("stroke-width", 6)
+                .attr("d", lineFn(streets[i]))
+                ;
+        };
+};
+
+function drawLines_under()
+{
+  var lineFn = d3.svg.line()
+          .x(function (d) {
+              return xScale(d.x);
+          })
+          .y(function (d) {
+              return yScale(d.y);
+          });
+
+  for(i=0;i<streets.length;i++)
+        {
+        g_streets.append("path")
+                .style("fill", "none")
+                .style("stroke-linecap","round")
+                .style("stroke", "gray")
+                .style("stroke-width", 7)
+                .attr("d", lineFn(streets[i]))
+                ;
+        };
+};
+
+
+////////////////////////////////////////////////////////
+/////////////////Death Bars///////////////////////////////
+var BAR_WIDTH = 15;
+var MAX_BAR_HEIGHT = 325;
+var padding=1;
+var date42=[];
+
+
+var bar_xScale = d3.scale.ordinal()
+           .domain(["Aug 19", "Aug 20", "Aug 21", "Aug 22", "Aug 23",
+                    "Aug 24", "Aug 25", "Aug 26", "Aug 27", "Aug 28",
+                    "Aug 29", "Aug 30", "Aug 31", "Sep 01", "Sep 02",
+                    "Sep 03", "Sep 04", "Sep 05", "Sep 06", "Sep 07",
+                    "Sep 08", "Sep 09", "Sep 10", "Sep 11", "Sep 12",
+                    "Sep 13", "Sep 14", "Sep 15", "Sep 16", "Sep 17",
+                    "Sep 18", "Sep 19", "Sep 20", "Sep 21", "Sep 22",
+                    "Sep 23", "Sep 24", "Sep 25", "Sep 26", "Sep 27",
+                    "Sep 28", "Sep 29",""])
+
+
+           .rangePoints([0, 42*(BAR_WIDTH+1)]);
+
+var bar_yScale = d3.scale.linear()
+           .domain([0, 150])
+           .range([MAX_BAR_HEIGHT, 0]);
+
+var bar_hScale = d3.scale.linear()
+            .domain([0, 150])
+            .range([0, MAX_BAR_HEIGHT]);
+
+
+
+            //Define X axis
+       			var xAxis = d3.svg.axis()
+            						  .scale(bar_xScale)
+           							  .orient("bottom")
+
+
+
+
+            //Define Y axis
+          	var yAxis = d3.svg.axis()
+          							  .scale(bar_yScale)
+                  			  .orient("left")
+                  			  .ticks(5);
+
+            //Create X axis
+            svg2.append("g")
+         			 .attr("class", "x axis")
+        			 .attr("transform", "translate(100,"+(MAX_BAR_HEIGHT + 35)+")")
+               .call(xAxis)
+               .selectAll("text")
+                 .attr("y", 9)
+                 .attr("x", -40)
+                 .attr("dy", ".35em")
+                 .attr("transform", "rotate(-90)")
+                 .style("text-anchor","start");
+
+
+            //Create Y axis
+            svg2.append("g")
+               .attr("class", "axis")
+               .attr("transform", "translate(90,30)")
+               .call(yAxis);
+/////
+var death_time = [];
+
+
+
+function drawBarChart()
+{
+
+  var maxValue = d3.max(death_time);
+
+
+  svg2.select("#barchart")
+      .selectAll('rect')
+      .data(death_time)
+      .enter()
+      .append("rect")
+      .attr("fill","black")
+      .attr('height',function(d){return bar_hScale(d[0]);})
+      .attr('width', function(d){return BAR_WIDTH;})
+      .attr("x", function(d,i){return i*(BAR_WIDTH+1);})
+      .attr("y", function(d){return bar_yScale(d[0]);})
+
+/*
+      .on("mouseout",function(){
+        d3.select(this)
+          .transition()
+          .duration(500)
+          .attr("fill","black")
+      })
+*/
+      .on("click", link_ppl)
+
+
+    };
+    var xPosition = 1100;//parseFloat(d3.select(this).attr("x"))+500;
+    var yPosition = 300;//parseFloat(d3.select(this).attr("y"))-10;
+
+    //Update the tooltip position and value
+    d3.select("#tooltip")
+      .style("left", xPosition + "px")
+      .style("top", yPosition + "px")
+      .select("#value")
+      .text("Select a Bar");
+
+    //Show the tooltip
+    d3.select("#tooltip").classed("hidden", false);
+//////////////////////////////////////////////////////
+//Gender Bar Chart
+////////////////////////
+/*
+//sum of gender==0
+d3.sum(ppl, function(d) {
+            return d[3]=="0";
+      });
+*/
+
+
+MAX_GEN_HEIGHT=175;
+GEN_WIDTH=50;
+var yaxis_adjust=MAX_BAR_HEIGHT+155;
+var genbar_start= 60;
+
+
+var gen_yScale = d3.scale.linear()
+           .domain([0,300])
+           .range([MAX_GEN_HEIGHT, 0]);
+
+var gen_hScale = d3.scale.linear()
+            .domain([0, 300])
+            .range([0, MAX_GEN_HEIGHT]);
+
+//gender y axis
+var yAxis_gen = d3.svg.axis()
+          .scale(gen_yScale)
+          .orient("left")
+          .ticks(4);
+
+svg2.append("g")
+     .attr("class", "y axis")
+     .attr("transform", "translate(105,"+yaxis_adjust+")")
+     .call(yAxis_gen);
+
+//age y axis
+var yAxis_age = d3.svg.axis()
+          .scale(gen_yScale)
+          .orient("left")
+          .ticks(4);
+
+svg2.append("g")
+     .attr("class", "age axis")
+     .attr("transform", "translate(420,"+yaxis_adjust+")")
+     .call(yAxis_age);
+
+     //gender X axis
+
+var gen_xScale = d3.scale.ordinal()
+                .domain(["FEMALE", "MALE",""])
+                .rangePoints([0, 2*(GEN_WIDTH+7)]);
+
+var xAxis_gen = d3.svg.axis()
+              .scale(gen_xScale)
+              .orient("bottom")
+
+svg2.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(110,660)")
+    .call(xAxis_gen)
+    .selectAll("text")
+      .attr("x", 5)
+      .style("text-anchor","start");
+
+      //Age X axis
+
+ var age_xScale = d3.scale.ordinal()
+                 .domain(["0-10", "11-20",
+                          "21-40", "41-60",
+                          "61-80", "> 80","" ])
+                 .rangePoints([0, 6*(GEN_WIDTH+5)]);
+
+ var xAxis_age = d3.svg.axis()
+               .scale(age_xScale)
+               .orient("bottom")
+
+ svg2.append("g")
+     .attr("class", "x axis")
+     .attr("transform", "translate(430,660)")
+     .call(xAxis_age)
+     .selectAll("text")
+       .attr("x", 10)
+       .style("text-anchor","start");
+
+//Function GenderChart
+    function GenderChart()
+    {
+
+      max_gen_value=d3.max([d3.sum(ppl, function(d) {
+                          return d[3]=="1";
+                          }),d3.sum(ppl, function(d) {
+                          return d[3]=="0";
+                          })])
+
+
+///////////Gender female bar
+      svg2.select("#genderchart")
+          .selectAll('rect')
+          .data(ppl)
+          .enter()
+          .append("rect")
+          .attr("stroke","black")
+          .attr("fill",color_gender_f)
+          .attr('height',function(d){
+                          return gen_hScale(d3.sum(ppl, function(d) {
+                              return d[3]=="1";
+                            })
+                          );
+                        })
+          .attr('width', function(d){return GEN_WIDTH;})
+          .attr("x", 10)
+          .attr("y", function(d){
+                        return genbar_start + gen_yScale(d3.sum(ppl, function(d) {
+                            return d[3]=="1";
+                          })
+                        );
+                      })
+          .on("click",function(data){
+                    d3.select(this)
+                      .transition()
+                      .duration(10)
+                      .attr("stroke","orange")
+                      .attr("stroke-width",5);
+
+                    d3.select('#ppl').selectAll("circle")
+                      .transition()
+                      .duration(0)
+                      .filter(function(d){return d[3]!=1})
+                          .attr("r", 0.5)
+                          .attr("stroke","gray")
+                          .attr("stroke-width","2px")
+                          .attr("opacity", .2);
+                        })
+          .on("mouseout",function(data){
+                          d3.select(this)
+                            .transition()
+                            .duration(0)
+                            .attr("stroke","black")
+                            .attr("stroke-width",1)
+
+                          d3.select('#ppl').selectAll("circle")
+                            .transition()
+                            .duration(0)
+                            .filter(function(d){return d[3]!=1})
+                              .attr("r",2)
+                              .attr("stroke","black")
+                              .attr("stroke-width","0.5px")
+                              .attr("opacity",1)
+                            })
+
+//txt female total
+svg2.select("#gentxt_f").selectAll("text")
+   .data(ppl)
+   .enter()
+   .append("text")
+   .text(
+          d3.sum(ppl, function(d) {
+              return d[3]=="1";
+
+       })
+     )
+   .attr("text-anchor", "middle")
+   .attr("x", 35)
+   .attr("y", function(d){
+                 return (genbar_start-5) + gen_yScale(d3.sum(ppl, function(d) {
+                     return d[3]=="1";
+                   })
+                 );
+               })
+   .attr("font-family", "sans-serif")
+   .attr("font-size", "11px")
+   .attr("fill", "blue");
+
+  ///////////Gender male bar
+      svg2.select("#genderchart2")
+          .selectAll('rect')
+          .data(ppl)
+          .enter()
+          .append("rect")
+          .attr("stroke","black")
+          .attr("fill",color_gender_m)
+          .attr('height',function(d){
+                return gen_hScale(d3.sum(ppl, function(d) {
+                                  return d[3]=="0";
+                              })
+                            );
+                          })
+          .attr('width', function(d){return GEN_WIDTH;})
+          .attr("x", 75)
+          .attr("y", function(d){
+                return genbar_start + gen_yScale(d3.sum(ppl, function(d) {
+                                    return d[3]=="0";
+                                })
+                              );
+                          })
+          .on("click",function(data){
+                      d3.select(this)
+                        .transition()
+                        .duration(10)
+                        .attr("stroke","orange")
+                        .attr("stroke-width",5);
+
+                      d3.select('#ppl').selectAll("circle")
+                        .transition()
+                        .duration(0)
+                        .filter(function(d){return d[3]!=0})
+                              .attr("r",0.5)
+                              .attr("stroke","gray")
+                              .attr("stroke-width","2px")
+                              .attr("opacity", .2)
+                            })
+          .on("mouseout",function(data){
+                      d3.select(this)
+                        .transition()
+                        .duration(0)
+                        .attr("stroke","black")
+                        .attr("stroke-width",1);
+
+                      d3.select('#ppl').selectAll("circle")
+                        .transition()
+                        .duration(0)
+                        .filter(function(d){return d[3]!=0})
+                            .attr("r",2)
+                            .attr("stroke","black")
+                            .attr("stroke-width","0.5px")
+                            .attr("opacity",1)
+                          })
+
+//txt male total
+svg2.select("#gentxt_m").selectAll("text")
+   .data(ppl)
+   .enter()
+   .append("text")
+   .text(
+          d3.sum(ppl, function(d) {
+              return d[3]=="0";
+
+       })
+     )
+   .attr("text-anchor", "middle")
+   .attr("x", 100)
+   .attr("y", function(d){
+                 return (genbar_start-5) + gen_yScale(d3.sum(ppl, function(d) {
+                     return d[3]=="0";
+                   })
+                 );
+               })
+   .attr("font-family", "sans-serif")
+   .attr("font-size", "11px")
+   .attr("fill", "blue");
+    }
+
+////////////////////////////////////////////////////////
+///////////FUNCTION Age group bar
+
+  function infoage(id,agegroup, x_value, barcolor){
+  svg2.select(id)
+      .selectAll('rect')
+      .data(ppl)
+      .enter()
+      .append("rect")
+      .attr("stroke","black")
+      .attr("fill", barcolor)
+      .attr('height',function(d){
+            return gen_hScale(d3.sum(ppl, function(d) {
+                              return d[2]==agegroup;
+                          })
+                        );
+                      })
+      .attr('width', function(d){return GEN_WIDTH;})
+      .attr("x", x_value)
+      .attr("y", function(d){
+            return genbar_start + gen_yScale(d3.sum(ppl, function(d) {
+                                return d[2]==agegroup;
+                            })
+                          );
+                      })
+      .on("click",function(data){
+              d3.select(this)
+                .transition()
+                .duration(10)
+                .attr("stroke","orange")
+                .attr("stroke-width",5);;
+
+                d3.select('#ppl').selectAll("circle")
+                  .transition()
+                  .duration(0)
+                  .filter(function(d){return d[2]!=agegroup})
+                    .attr("r",0.5)
+                    .attr("stroke","gray")
+                    .attr("stroke-width","2px")
+                    .attr("opacity", .2)
+                  })
+
+      .on("mouseout",function(){
+          d3.select(this)
+            .transition()
+            .duration(0)
+            .attr("stroke","black")
+            .attr("stroke-width",1);
+
+            d3.select('#ppl').selectAll("circle")
+              .transition()
+              .duration(0)
+              .filter(function(d){return d[2]!=agegroup})
+                .attr("r",2)
+                .attr("stroke","black")
+                .attr("stroke-width","0.5px")
+                .attr("opacity",1)
+        })
+
+        //txt agegroup total
+        svg2.select(id).selectAll("text")
+           .data(ppl)
+           .enter()
+           .append("text")
+           .text(
+                  d3.sum(ppl, function(d) {
+                      return d[2]==agegroup;
+
+               })
+             )
+           .attr("text-anchor", "middle")
+           .attr("x", (x_value+25))
+           .attr("y", function(d){
+                         return (genbar_start-5) + gen_yScale(d3.sum(ppl, function(d) {
+                             return d[2]==agegroup;
+                           })
+                         );
+                       })
+           .attr("font-family", "sans-serif")
+           .attr("font-size", "11px")
+           .attr("fill", "blue");
+
+    }
+
+
+/////////////////////FUNCTION Update age chart on click
+  function infoage_update(id,agegroup,data){
+
+  svg2.select(id)
+      .selectAll('rect')
+      .data(ppl)
+      .transition()
+      .duration(1000)
+      .attr('height',function(d){
+            return gen_hScale(d3.sum(data, function(d) {
+                              return d[2]==agegroup;
+                          })
+                        );
+                      })
+      .attr("y", function(d){
+            return genbar_start + gen_yScale(d3.sum(data, function(d) {
+                                return d[2]==agegroup;
+                            })
+                          );
+                      })
+
+
+
+      //txt agegroup total
+
+      var agegroup_sum= d3.sum(data, function(d) {
+                              return d[2]==agegroup;})
+
+if (agegroup_sum>0){
+      svg2.select(id).selectAll("text")
+         .data(ppl)
+         .transition()
+         .duration(1000)
+         .text(agegroup_sum)
+
+         .attr("text-anchor", "middle")
+         .attr("y", function(d){
+                       return (genbar_start-5) + gen_yScale(d3.sum(data, function(d) {
+                           return d[2]==agegroup;
+                         })
+                       );
+                     })
+    } else{
+      svg2.select(id).selectAll("text")
+         .data(ppl)
+         .transition()
+         .duration(1000)
+         .text('')
+
+         .attr("text-anchor", "middle")
+         .attr("y", function(d){
+                       return (genbar_start-5) + gen_yScale(d3.sum(data, function(d) {
+                           return d[2]==agegroup;
+                         })
+                       );
+                     })
+    }
+
+
+
+  }
+
+//////////////////Draw Age charts
+function AgeChart()
+{
+
+  max_gen_value=d3.max([d3.sum(ppl, function(d) {
+                      return d[3]=="1";
+                      }),d3.sum(ppl, function(d) {
+                                            return d[3]=="0";
+                                          })])
+
+
+          infoage("#agechart0","0",330, color_group1);
+
+
+          infoage("#agechart1","1",385,color_group2);
+
+
+          infoage("#agechart2","2",440,color_group3);
+
+
+          infoage("#agechart3","3",495,color_group4);
+
+
+          infoage("#agechart4","4",550,color_group5);
+
+
+          infoage("#agechart5","5",605,color_group6);
+
+          }
+
+
+
+////////////////////////////////////////////////////////
+var parseDate=d3.time.format("%e-%b").parse;
+var formatDate=d3.time.format("%b %d");
+
+d3.csv('deathdays.csv', function(data)
+{
+  data.forEach(function(d){
+    d.deaths=+d.deaths;
+    d.date=formatDate(parseDate(d.date));
+    death_time.push([d.deaths, d.group, d.date]);
+    date42.push(d.date);
+  });
+
+  drawBarChart()
+});
+
+
+//load and plot streets
+    d3.json("streets.json",function(data){
+            streets=data;
+            drawLines_under()
+             drawLines()
+    });
+
+
+//Load and plot pumps
+    d3.csv("pumps.csv", function(data){
+           data.forEach(function(d){
+                d.x=+d.x;
+                d.y=+d.y;
+              pumps.push([d.x,d.y,d.name]);
+                      });
+            plotpumps()
+          });
+
+//Load and plot deaths_age_sex
+      d3.csv("deaths_age_sex.csv", function(data){
+            data.forEach(function(d){
+                d.x=+d.x;
+                d.y=+d.y;
+                d.age=d.age;
+                d.gender=d.gender;
+                ppl.push([d.x,d.y,d.age,d.gender, d.group]);
+              });
+            plotppl()
+            GenderChart()
+            AgeChart()
+
+          });
+
+
+//////////////////////////////////////////////////////////
+          //mouseover fxn
+          function link_ppl(link){
+
+            ppl2=ppl.filter(function(d){return d[4]==link[1]})
+
+            ppl2_not=ppl.filter(function(d){return d[4]!=link[1]})
+          //max gender value between m and f
+            max_gen_value=d3.max([d3.sum(ppl2, function(d) {
+                                return d[3]=="1";
+                              }),d3.sum(ppl2, function(d) {
+                                                      return d[3]=="0";
+                                                    })])
+
+            //gender bar scale
+            gen_yScale.domain([0,2+max_gen_value]);
+
+            gen_hScale.domain([0, 2+max_gen_value]);
+
+            d3.select("#barchart").selectAll("rect")
+              .transition()
+              .duration(500)
+              .attr("fill","black")
+
+            d3.select(this)
+              .transition()
+              .duration(500)
+              .attr("fill", "orange");
+
+            d3.select('#ppl').selectAll("circle")
+              .transition()
+              .duration(1000)
+              .attr("r", 3)
+              .attr("stroke","black")
+              .attr("stroke-width","0.5px")
+              .attr("opacity",1)
+              .filter(function(data){return data[4]!=link[1]})
+                .attr("r", 0.5)
+                .attr("stroke","gray")
+                .attr("stroke-width","2px")
+                .attr("opacity", .2);
+
+            d3.select('#genderchart').selectAll("rect")
+              .data(ppl)
+              .transition()
+              .duration(1000)
+                .attr('height',function(d){
+                                return gen_hScale(d3.sum(ppl2, function(d) {
+                                    return d[3]=="1";
+                                  })
+                                );
+                              })
+                .attr("y", function(d){
+                                return genbar_start + gen_yScale(d3.sum(ppl2, function(d) {
+                                  return d[3]=="1";
+                                  })
+                                );
+                            })
+
+            //UPDATE txt female total
+                            var gender_f_sum=d3.sum(ppl2, function(d) {
+                                return d[3]=="1"})
+
+                          if (gender_f_sum>0){
+                            svg2.select("#gentxt_f").selectAll("text")
+                               .data(ppl)
+                               .transition()
+                               .duration(1000)
+                               .text(gender_f_sum)
+                               .attr("text-anchor", "middle")
+                               .attr("x", 35)
+                               .attr("y", function(d){
+                                             return (genbar_start-5) + gen_yScale(d3.sum(ppl2, function(d) {
+                                                 return d[3]=="1";
+                                               })
+                                             );
+                                           })
+                               .attr("font-family", "sans-serif")
+                               .attr("font-size", "11px")
+                               .attr("fill", "blue");
+                             } else {
+                               svg2.select("#gentxt_f").selectAll("text")
+                                  .data(ppl)
+                                  .transition()
+                                  .duration(1000)
+                                  .text('')
+                                  .attr("text-anchor", "middle")
+                                  .attr("x", 35)
+                                  .attr("y", function(d){
+                                                return (genbar_start-5) + gen_yScale(d3.sum(ppl2, function(d) {
+                                                    return d[3]=="1";
+                                                  })
+                                                );
+                                              })
+                                  .attr("font-family", "sans-serif")
+                                  .attr("font-size", "11px")
+                                  .attr("fill", "blue");
+                             }
+
+            d3.select('#genderchart2').selectAll("rect")
+                .data(ppl)
+                .transition()
+                .duration(1000)
+                .attr('height',function(d){
+                                return gen_hScale(d3.sum(ppl2, function(d) {
+                                    return d[3]=="0";
+                                  })
+                                );
+                              })
+                .attr("y", function(d){
+                                return genbar_start + gen_yScale(d3.sum(ppl2, function(d) {
+                                  return d[3]=="0";
+                                  })
+                                );
+                            });
+
+                            //UPDATE txt male total
+                            var gender_m_sum=d3.sum(ppl2, function(d) {
+                                return d[3]=="0"})
+
+                          if (gender_m_sum>0){
+                            svg2.select("#gentxt_m").selectAll("text")
+                               .data(ppl)
+                               .transition()
+                               .duration(1000)
+                               .text(
+                                      d3.sum(ppl2, function(d) {
+                                          return d[3]=="0";
+
+                                   })
+                                 )
+                               .attr("text-anchor", "middle")
+                               .attr("x", 100)
+                               .attr("y", function(d){
+                                             return (genbar_start-5) + gen_yScale(d3.sum(ppl2, function(d) {
+                                                 return d[3]=="0";
+                                               })
+                                             );
+                                           })
+                               .attr("font-family", "sans-serif")
+                               .attr("font-size", "11px")
+                               .attr("fill", "blue");
+                             } else {
+                               svg2.select("#gentxt_m").selectAll("text")
+                                  .data(ppl)
+                                  .transition()
+                                  .duration(1000)
+                                  .text('')
+                                  .attr("text-anchor", "middle")
+                                  .attr("x", 100)
+                                  .attr("y", function(d){
+                                                return (genbar_start-5) + gen_yScale(d3.sum(ppl2, function(d) {
+                                                    return d[3]=="0";
+                                                  })
+                                                );
+                                              })
+                                  .attr("font-family", "sans-serif")
+                                  .attr("font-size", "11px")
+                                  .attr("fill", "blue");
+                             }
+
+
+              infoage_update("#agechart0","0",ppl2);
+
+
+              infoage_update("#agechart1","1",ppl2);
+
+
+              infoage_update("#agechart2","2",ppl2);
+
+
+              infoage_update("#agechart3","3",ppl2);
+
+
+              infoage_update("#agechart4","4",ppl2);
+
+
+              infoage_update("#agechart5","5",ppl2);
+
+
+                  					//Update Y axis
+                  					svg2.select(".y.axis")
+                  				    	.transition()
+                  				    	.duration(1000)
+                  						.call(yAxis_gen);
+
+                              svg2.select(".age.axis")
+                    				    	.transition()
+                    				    	.duration(1000)
+                    						.call(yAxis_age);
+
+                                //x y position
+                                var xPosition_bar = 1100;//parseFloat(d3.select(this).attr("x"))+500;
+                                var yPosition_bar = 300;//parseFloat(d3.select(this).attr("y"))-10;
+
+                                //Update the tooltip position and value
+                                d3.select("#tooltip")
+                                  .style("left", xPosition_bar + "px")
+                                  .style("top", yPosition_bar + "px")
+                                  .select("#value")
+                                  .text(link[2] + ": " + link[0] + " Death(s)"
+                                    );
+
+                                //Show the tooltip
+                                d3.select("#tooltip").classed("hidden", false);
+
+                  ///////////Gender bar link
+
+                  function gender_minimize(id,gender){
+                                svg2.select(id)
+                                .on("click",function(data){
+
+                                        d3.select('#ppl').selectAll("circle")
+                                          .transition()
+                                          .duration(0)
+                                          .filter(function(d){return d[3]!=gender & d[4]==link[1]})
+                                          .attr("r",0.5)
+                                          .attr("stroke","gray")
+                                          .attr("stroke-width","2px")
+                                          .attr("opacity", .2)
+                                          })
+                                .on("mouseout",function(data){
+
+                                        d3.select('#ppl').selectAll("circle")
+                                          .transition()
+                                          .duration(0)
+                                          .filter(function(d){return d[3]!=gender & d[4]==link[1]})
+                                          .attr("r",3)
+                                          .attr("stroke","black")
+                                          .attr("stroke-width","0.5px")
+                                          .attr("opacity",1)
+                                      })
+                                }
+                      gender_minimize("#genderchart",1);
+                      gender_minimize("#genderchart2",0);
+
+//
+      function infoage_minimize(id,agegroup, x_value, barcolor){
+                      svg2.select(id)
+                          .selectAll('rect')
+
+                          .on("click",function(data){
+
+                                    d3.select(this)
+                                      .transition()
+                                      .duration(10)
+                                      .attr("stroke","orange")
+                                      .attr("stroke-width",5);;
+
+                                    d3.select('#ppl').selectAll("circle")
+                                      .transition()
+                                      .duration(0)
+                                      .filter(function(d){return d[2]!=agegroup & d[4]==link[1]})
+                                        .attr("r",0.5)
+                                        .attr("stroke","gray")
+                                        .attr("stroke-width","2px")
+                                        .attr("opacity", .2)
+                                      })
+
+                          .on("mouseout",function(){
+
+                                d3.select(this)
+                                      .transition()
+                                      .duration(10)
+                                      .attr("stroke","black")
+                                      .attr("stroke-width",1);;
+
+                                d3.select('#ppl').selectAll("circle")
+                                  .transition()
+                                  .duration(0)
+                                  .filter(function(d){return d[2]!=agegroup & d[4]==link[1]})
+                                    .attr("r",3)
+                                    .attr("stroke","black")
+                                    .attr("stroke-width","0.5px")
+                                    .attr("opacity",1)
+                            })
+                          }
+                          infoage_minimize("#agechart0","0",330, color_group1);
+
+
+                        infoage_minimize("#agechart1","1",385, color_group2);
+
+
+                        infoage_minimize("#agechart2","2",440, color_group3);
+
+
+                          infoage_minimize("#agechart3","3",495, color_group4);
+
+
+                          infoage_minimize("#agechart4","4",550, color_group5);
+
+                          infoage_minimize("#agechart5","5",605, color_group6);
+
+
+
+
+          }// end of link
+
+
+///////// FUNCTION unlink
+            function unlink_ppl(d){
+
+              //Update Gender bar scale
+              gen_yScale.domain([0,300])
+
+              gen_hScale.domain([0, 300])
+
+
+                   d3.select("#barchart").selectAll("rect")
+                     .transition()
+                     .duration(500)
+                     .attr("fill", "black")
+
+                  //clean slate ppl; had trouble when reset
+                   svg.select('#ppl').selectAll("circle")
+                       .transition()
+                       .duration(1000)
+                       .attr("r", 2)// <-- No longer "rect"
+                       .attr("stroke","black")
+                       .attr("stroke-width","0.5px")
+                       .attr("opacity",1)
+
+
+                  svg2.select('#genderchart').selectAll("rect")
+                         .transition()
+                         .duration(1000)
+                           .attr("fill",color_gender_f)
+                           .attr('height',function(d){
+                                           return gen_hScale(d3.sum(ppl, function(d) {
+                                               return d[3]=="1";
+                                             })
+                                           );
+                                         })
+                           .attr("y", function(d){
+                                           return genbar_start + gen_yScale(d3.sum(ppl, function(d) {
+                                             return d[3]=="1";
+                                             })
+                                           );
+                                       })
+
+
+                     //txt female total
+                                       svg2.select("#gentxt_f").selectAll("text")
+                                          .data(ppl)
+                                          .enter()
+                                          .append("text")
+                                          .text(
+                                                 d3.sum(ppl, function(d) {
+                                                     return d[3]=="1";
+
+                                              })
+                                            )
+                                          .attr("text-anchor", "middle")
+                                          .attr("x", 35)
+                                          .attr("y", function(d){
+                                                        return (genbar_start-5) + gen_yScale(d3.sum(ppl, function(d) {
+                                                            return d[3]=="1";
+                                                          })
+                                                        );
+                                                      })
+                                          .attr("font-family", "sans-serif")
+                                          .attr("font-size", "11px")
+                                          .attr("fill", "blue");
+
+//Male bar reset
+                       d3.select('#genderchart2').selectAll("rect")
+                           .data(ppl)
+                           .transition()
+                           .duration(1000)
+                           .attr("fill",color_gender_m)
+                           .attr('height',function(d){
+                                 return gen_hScale(d3.sum(ppl, function(d) {
+                                                   return d[3]=="0";
+                                               })
+                                             );
+                                           })
+                            .attr("y", function(d){
+                                 return genbar_start + gen_yScale(d3.sum(ppl, function(d) {
+                                                   return d[3]=="0";
+                                                 })
+                                               );
+                                           })
+
+    //RESET txt female total
+         svg2.select("#gentxt_f").selectAll("text")
+              .data(ppl)
+              .transition()
+              .duration(1000)
+              .text(
+                     d3.sum(ppl, function(d) {
+                                   return d[3]=="1";
+                                  })
+                            )
+              .attr("text-anchor", "middle")
+              .attr("x", 35)
+              .attr("y", function(d){
+                            return (genbar_start-5) + gen_yScale(d3.sum(ppl, function(d) {
+                                    return d[3]=="1";
+                                      })
+                                  );
+                      })
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "11px")
+              .attr("fill", "blue");
+
+              //RESET txt male total
+                   svg2.select("#gentxt_m").selectAll("text")
+                        .data(ppl)
+                        .transition()
+                        .duration(1000)
+                        .text(
+                               d3.sum(ppl, function(d) {
+                                             return d[3]=="0";
+                                            })
+                                      )
+                        .attr("text-anchor", "middle")
+                        .attr("x", 100)
+                        .attr("y", function(d){
+                                      return (genbar_start-5) + gen_yScale(d3.sum(ppl, function(d) {
+                                              return d[3]=="0";
+                                                })
+                                            );
+                                })
+                        .attr("font-family", "sans-serif")
+                        .attr("font-size", "11px")
+                        .attr("fill", "blue");
+
+
+
+//
+function reset_gender_minimize(id,gender,barcolor){
+              svg2.select(id)
+              .on("click",function(data){
+                      d3.select(this)
+                        .transition()
+                        .duration(10)
+                        .attr("stroke","orange")
+                        .attr("stroke-width",5);
+
+                      d3.select('#ppl').selectAll("circle")
+                        .transition()
+                        .duration(0)
+                        .filter(function(d){return d[3]!=gender})
+                        .attr("r",0.5)
+                        .attr("stroke","gray")
+                        .attr("stroke-width","2px")
+                        .attr("opacity", .2)
+                        })
+              .on("mouseout",function(data){
+                      d3.select(this)
+                        .transition()
+                        .duration(10)
+                        .attr("stroke","black")
+                        .attr("stroke-width",1);
+
+                      d3.select('#ppl').selectAll("circle")
+                        .transition()
+                        .duration(0)
+                        .filter(function(d){return d[3]!=gender})
+                        .attr("r",2)
+                        .attr("stroke","black")
+                        .attr("stroke-width","0.5px")
+                        .attr("opacity",1)
+                    })
+              }
+reset_gender_minimize("#genderchart",1)
+reset_gender_minimize("#genderchart2",0)
+
+//reset age group
+var agegroup0_update= infoage_update("#agechart0","0",ppl);
+agegroup0_update
+
+var agegroup1_update= infoage_update("#agechart1","1",ppl);
+agegroup1_update
+
+var agegroup2_update= infoage_update("#agechart2","2",ppl);
+agegroup2_update
+
+var agegroup3_update= infoage_update("#agechart3","3",ppl);
+agegroup3_update
+
+var agegroup4_update= infoage_update("#agechart4","4",ppl);
+agegroup4_update
+
+var agegroup5_update= infoage_update("#agechart5","5",ppl);
+agegroup5_update
+
+function infoage_reset(id,agegroup, x_value,barcolor){
+                svg2.select(id)
+                    .selectAll('rect')
+
+                    .on("click",function(data){
+                            d3.select(this)
+                              .transition()
+                              .duration(0)
+                              .attr("stroke","orange")
+                              .attr("stroke-width",5);
+
+                              d3.select('#ppl').selectAll("circle")
+                                .transition()
+                                .duration(0)
+                                .filter(function(d){return d[2]!=agegroup})
+                                  .attr("r",0.5)
+                                  .attr("stroke","gray")
+                                  .attr("stroke-width","2px")
+                                  .attr("opacity", .2)
+                                })
+
+                    .on("mouseout",function(){
+                        d3.select(this)
+                          .transition()
+                          .duration(0)
+                          .attr("stroke","black")
+                          .attr("stroke-width",1);
+
+                          d3.select('#ppl').selectAll("circle")
+                            .transition()
+                            .duration(0)
+                            .filter(function(d){return d[2]!=agegroup})
+                              .attr("r",2)
+                              .attr("stroke","black")
+                              .attr("stroke-width","0.5px")
+                              .attr("opacity",1)
+                      })
+                    }
+                    infoage_reset("#agechart0","0",330, color_group1);
+
+
+                  infoage_reset("#agechart1","1",385, color_group2);
+
+
+                  infoage_reset("#agechart2","2",440, color_group3);
+
+
+                    infoage_reset("#agechart3","3",495, color_group4);
+
+
+                    infoage_reset("#agechart4","4",550, color_group5);
+
+                    infoage_reset("#agechart5","5",605, color_group6);
+
+                  //Update Y axis
+                         svg2.select(".y.axis")
+                             .transition()
+                             .duration(1000)
+                             .call(yAxis_gen);
+                         svg2.select(".age.axis")
+                             .transition()
+                             .duration(1000)
+                             .call(yAxis_age);
+
+                       //Update the tooltip position and value
+                       d3.select("#tooltip")
+                         .style("left", 1100 + "px")
+                         .style("top", 300 + "px")
+                         .select("#value")
+                         .text("Select a Bar");
+
+                       //Show the tooltip
+                       d3.select("#tooltip").classed("hidden", false);
+
+          }//end of unlink
+
+//LEGEND
+var legend= d3.select("#legend")
+var legend_element=[1,1]
+
+//building
+legend.selectAll("rect")
+    .data(legend_element)
+    .enter()
+    .append("rect")
+      .attr("x", 15)
+      .attr("y", 50)
+      .attr("stroke","black")
+      .attr("width",30)
+      .attr("height", 25)
+      .attr("fill","gray")
+
+
+//pumps
+legend.selectAll("circle")
+    .data(legend_element)
+    .enter()
+    .append("circle")
+    .attr("cx", 40)
+    .attr("cy", 100)
+    .attr("r",5)
+    .attr("stroke","black")
+    .attr("fill","aqua")
+
+    //death
+    legend.select("#death_legend").selectAll("circle")
+        .data(legend_element)
+        .enter()
+        .append("circle")
+        .attr("cx", 40)
+        .attr("cy", 135)
+        .attr("r",3)
+        .attr("stroke","black")
+        .attr("fill","purple")
+////////////////////
+//Gender: male
+legend.select("#male_legend").selectAll("circle")
+    .data(legend_element)
+    .enter()
+    .append("circle")
+    .attr("cx", 195)
+    .attr("cy", 100)
+    .attr("r",3)
+    .attr("stroke","black")
+    .attr("fill",color_gender_m)
+//Gender: female
+    legend.select("#female_legend").selectAll("circle")
+        .data(legend_element)
+        .enter()
+        .append("circle")
+        .attr("cx", 195)
+        .attr("cy", 65)
+        .attr("r",3)
+        .attr("stroke","black")
+        .attr("fill",color_gender_f)
+
+//////////////////////
+function agegroup_legend(id, x, y, color){
+  legend.select(id).selectAll("circle")
+      .data(legend_element)
+      .enter()
+      .append("circle")
+      .attr("cx", x)
+      .attr("cy", y)
+      .attr("r",3)
+      .attr("stroke","black")
+      .attr("fill",color)
+
+}
+
+agegroup_legend("#legend_age1",345,65,color_group1)
+agegroup_legend("#legend_age2",345,100,color_group2)
+agegroup_legend("#legend_age3",345,135,color_group3)
+agegroup_legend("#legend_age4",485,65,color_group4)
+agegroup_legend("#legend_age5",485,100,color_group5)
+agegroup_legend("#legend_age6",485,135,color_group6)
+
+
+//Buttons and Radio circle options
+//RESET Buttons
+  d3.select("#Reset")
+    .on("click", unlink_ppl)
+//RADIO circle options
+
+//Define deaths
+var death_circle= g_ppl.selectAll("circle")  // <-- No longer "rect"
+                       .data(ppl)
+                       .enter()
+                       .append("circle")
+                       .attr("cx", function(d) {
+                            return xScale(d[0]);
+                       })
+                       .attr("cy", function(d) {
+                            return yScale(d[1]);
+                       })
+                       .attr("r", function(d) {
+                          return 1.25;
+                      })
+                      .attr("stroke","gray")
+                      .attr("stroke-width","0.5px")
+                      .attr("opacity",1)
+
+
+
+//Radios
+
+d3.selectAll("#radio")
+  .on("click", function() {
+    var view = d3.select(this).node().value;
+    //reset all to None
+    g_ppl.selectAll("circle").attr("fill","purple")
+
+    switch (view){
+      case "gender_mapppl":
+        g_ppl.selectAll("circle")
+              .attr("fill",color_gender_m)
+              .filter(function(d){
+               return d[3]==1
+              })
+              .attr("fill",color_gender_f)
+      break;
+      case "agegroup_mapppl":
+        //group1
+        g_ppl.selectAll("circle")
+             .filter(function(d){
+                 return d[2]==0
+              })
+                .attr("fill",color_group1)
+        //group2
+        g_ppl.selectAll("circle")
+             .filter(function(d){
+                 return d[2]==1
+              })
+                .attr("fill",color_group2)
+        //group3
+        g_ppl.selectAll("circle")
+             .filter(function(d){
+                 return d[2]==2
+              })
+                .attr("fill",color_group3)
+        //group4
+        g_ppl.selectAll("circle")
+             .filter(function(d){
+                 return d[2]==3
+              })
+                .attr("fill",color_group4)
+        //group5
+        g_ppl.selectAll("circle")
+              .filter(function(d){
+                 return d[2]==4
+             })
+                .attr("fill",color_group5)
+        //group6
+        g_ppl.selectAll("circle")
+             .filter(function(d){
+                 return d[2]==5
+              })
+                .attr("fill",color_group6)
+      break;
+      case "none":
+      default:
+    }
+  })
+
+  ;
+    </script>
+    <p>Documentation</p>
+    <p>Youtube Instruction Video</p>
+    <p> </p>
+
+  </body>
+</html>
