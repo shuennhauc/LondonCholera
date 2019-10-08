@@ -3,7 +3,7 @@
   <!--comment in html-->
   <head>
       <meta charset="utf-8">
-      <title>Project 1</title>
+      <title>London 1854 Cholera Epidemic</title>
       <script src="https://d3js.org/d3.v3.min.js"></script>
       <style type="text/css">
         	text {
@@ -141,8 +141,8 @@
     <g id='agechart4' transform="translate(100,420)"/>
     <g id='agechart5' transform="translate(100,420)"/>
 
-    <text x="400" y="20">COUNT OF DEATHS</text>
-    <text x="400" y="40">by Date</text>
+    <text x="400" y="20">NUMBER OF DEATHS</text>
+    <text x="400" y="40">For Each Date</text>
 
     <text id="bar_txt" x="-250" y="40" transform="rotate(-90)">Number of Deaths</text>
     <text id="gender_txt" x="-635" y="60" transform="rotate(-90)">Number of Deaths</text>
@@ -170,6 +170,7 @@
     <g id="bstreet" transform="translate(0,-11), rotate(1.25)"/>
     <g id="ox" transform="translate(0,-11), rotate(1.25)"/>
     <g id="rstreet" transform="translate(0,-11), rotate(1.25)"/>
+    <g id="silverstreet" transform="translate(0,-11), rotate(1.25)"/>
     </g>
   </svg>
 
@@ -223,7 +224,7 @@ var color_group2="salmon"
 var color_group3="mediumblue"
 var color_group4="dodgerblue"
 var color_group5="goldenrod"
-var color_group6="gold"
+var color_group6="rgb(255,235,0)"
 
 var color_gender_f="hotpink"
 var color_gender_m="blue"
@@ -250,6 +251,7 @@ var color_gender_m="blue"
     var text_bstreet= svg.select("#bstreet").append("g");
     var text_ox= svg.select("#ox").append("g");
     var text_rstreet= svg.select("#rstreet").append("g");
+    var text_silverstreet= svg.select("#silverstreet").append("g");
 
     var zoom= d3.behavior.zoom()
                 .scaleExtent([1,4])
@@ -293,6 +295,10 @@ var color_gender_m="blue"
                   ].join(" "));
 
                   text_rstreet.attr("transform", [
+                        "translate(" + [tx, ty] +")",
+                        "scale(" + e.scale +")"
+                  ].join(" "));
+                  text_silverstreet.attr("transform", [
                         "translate(" + [tx, ty] +")",
                         "scale(" + e.scale +")"
                   ].join(" "));
@@ -372,6 +378,22 @@ text_bstreet.selectAll("text")
             .attr("fill","black")
             .attr("transform", "rotate(60.1)");
 
+  var silverstreet=[[3,6.68]];
+  text_silverstreet.selectAll("text")
+              .data(silverstreet)
+              .enter()
+              .append("text")
+              .attr("x", function(d){
+                return xScale(d[0]);
+                })
+              .attr("y", function(d){
+                return yScale(d[1]);
+                })
+              .text("SILVER STREET")
+              .style("font-size", "5px")
+              .attr("fill","black")
+              .attr("transform", "rotate(-36.5)");
+
 //WH
 
 var wh=[[7.35,10.7]]; //
@@ -398,14 +420,14 @@ g_wh.selectAll("rect")
                .attr("fill", "yellow")
 
              var xPosition = parseFloat(d3.select(this).attr("x"))+100;
-             var yPosition = parseFloat(d3.select(this).attr("y"))-100;
+             var yPosition = parseFloat(d3.select(this).attr("y"))-50;
 
              //Update the tooltip position and value
              d3.select("#tooltip2")
                .style("left", xPosition + "px")
                .style("top", yPosition + "px")
                .select("#value")
-               .text("WORK HOUSE");
+               .text("Work House");
 
              //Show the tooltip
              d3.select("#tooltip2").classed("hidden", false)
@@ -445,15 +467,15 @@ g_brew.selectAll("rect")
                .duration(500)
                .attr("fill", "yellow")
 
-             var xPosition = parseFloat(d3.select(this).attr("x"))+100;
-             var yPosition = parseFloat(d3.select(this).attr("y"))-150;
+             var xPosition = xScale(d[0])+150;
+             var yPosition = yScale(d[1])-75;
 
              //Update the tooltip position and value
              d3.select("#tooltip2")
                .style("left", xPosition + "px")
                .style("top", yPosition + "px")
                .select("#value")
-               .text("BREWERY");
+               .text("Brewery");
 
              //Show the tooltip
              d3.select("#tooltip2").classed("hidden", false)
@@ -496,7 +518,7 @@ function plotpumps(){
                               .attr("fill", "yellow");
 
                               var xPosition = xScale(d[0]);
-                              var yPosition = yScale(d[1]);
+                              var yPosition = yScale(d[1])+50;
 
                             //Update the tooltip position and value
                             d3.select("#tooltip3")
@@ -1920,9 +1942,10 @@ d3.selectAll("#radio")
 
   ;
     </script>
-    <p><a href="https://docs.google.com/document/d/1Mzw6Ka-3oz1OxLt2wljf2IDeVhp3ARZX7FKkdwVkv2c/edit?usp=sharing">Documentation</a></p>
-    <p>Youtube Instruction Video</p>
+    <p><a href="https://drive.google.com/file/d/1nWCkXj55aMocuG3P7t9BW6jbxzGg_2jc/view?usp=sharing" target="_blank">Documentation Page</a></p>
+    <p><a href="https://www.youtube.com/watch?v=oJHJwFyYoG4&feature=youtu.be" target="_blank">Demonstration Video</a></p>
     <p> </p>
-
+    <p>Shuennhau Chang</p>
+    <p>Created on October 8, 2019</p>
   </body>
 </html>
